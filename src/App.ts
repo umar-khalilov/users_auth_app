@@ -12,7 +12,7 @@ import { AppModule } from './app.module';
 export class App {
     private readonly application: INestApplication;
     private readonly config: ConfigService;
-    private readonly serverPort;
+    private readonly serverPort: number;
     private readonly logger: Logger;
 
     constructor(application: INestApplication) {
