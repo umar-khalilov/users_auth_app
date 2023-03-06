@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from './app/validateEnv';
+import { UserModule } from './models/users/user.module';
+import { RoleModule } from './models/roles/role.module';
 
 @Module({
     imports: [
@@ -11,6 +13,8 @@ import { validateEnv } from './app/validateEnv';
             envFilePath: '.development.env',
             validate: validateEnv,
         }),
+        UserModule,
+        RoleModule,
     ],
     controllers: [],
     providers: [],
