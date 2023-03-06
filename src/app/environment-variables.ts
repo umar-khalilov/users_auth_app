@@ -1,5 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsPort, IsString } from 'class-validator';
+import {
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsPort,
+    IsString,
+    Max,
+    Min,
+} from 'class-validator';
 import { Environment } from './constants/environment.enum';
 
 export class EnvironmentVariables {
@@ -10,13 +18,15 @@ export class EnvironmentVariables {
     @IsString()
     readonly DEPLOY_HOST: string | undefined;
 
-    @IsPort()
+    @Min(0)
+    @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
     readonly SERVER_PORT: number | undefined;
 
-    @IsPort()
+    @Min(0)
+    @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
@@ -30,7 +40,8 @@ export class EnvironmentVariables {
     @IsNotEmpty()
     readonly DB_HOST: string | undefined;
 
-    @IsPort()
+    @Min(0)
+    @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
@@ -48,7 +59,8 @@ export class EnvironmentVariables {
     @IsNotEmpty()
     readonly DB_PASSWORD: string | undefined;
 
-    @IsPort()
+    @Min(0)
+    @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
