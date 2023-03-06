@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsPort, IsString } from 'class-validator';
 import { Environment } from './constants/environment.enum';
 
 export class EnvironmentVariables {
@@ -10,11 +10,13 @@ export class EnvironmentVariables {
     @IsString()
     readonly DEPLOY_HOST: string | undefined;
 
+    @IsPort()
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
     readonly SERVER_PORT: number | undefined;
 
+    @IsPort()
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
@@ -28,6 +30,7 @@ export class EnvironmentVariables {
     @IsNotEmpty()
     readonly DB_HOST: string | undefined;
 
+    @IsPort()
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
@@ -45,6 +48,7 @@ export class EnvironmentVariables {
     @IsNotEmpty()
     readonly DB_PASSWORD: string | undefined;
 
+    @IsPort()
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
