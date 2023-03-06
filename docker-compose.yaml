@@ -1,0 +1,62 @@
+services:
+    database:
+        container_name: database
+        image: 'postgres:14-alpine3.16'
+        env_file:
+            - ./.development.env
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_DB: ${DB_NAME}
+            PG_DATA: /var/lib/postgresql/data
+        ports:
+            - ${DB_PORT}:${DB_PORT}
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        networks:
+            - users-net
+        tty: true
+        restart: always
+    redis:
+        container_name: redis
+        image: 'redis:alpine3.15'
+        env_file:
+            - ./.development.env
+        ports:
+            - ${REDIS_PORT}:${REDIS_PORT}
+        links:
+            - database
+        networks:
+            - users-net
+        restart: on-failure
+    node-app:
+        container_name: node-app
+        build:
+            context: ./
+            dockerfile: ./Dockerfile
+            target: development
+        # RUN in debug mode: npm run start:debug --> Also start your debugger
+        # Run in dev mode: npm run start:dev
+        command: npm run start:dev
+        volumes:
+            - ./:/usr/src/app
+            - /usr/src/app/node_modules
+        env_file:
+            - ./.development.env
+        ports:
+            - ${SERVER_PORT}:${SERVER_PORT}
+            - ${DEBUG_PORT}:${DEBUG_PORT}
+        networks:
+            - users-net
+        depends_on:
+            - database
+            - redis
+        restart: on-failure
+
+volumes:
+    pgdata:
+    node-app:
+
+networks:
+    users-net:
+        driver: bridge
