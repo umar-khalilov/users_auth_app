@@ -1,9 +1,10 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, Relation } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { AddressDto } from './dto/address.dto';
 import { CompanyDto } from './dto/company.dto';
+import { RoleEntity } from '../roles/role.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity {
@@ -54,6 +55,24 @@ export class UserEntity extends AbstractEntity {
     @ApiProperty({ example: CompanyDto, description: 'Company of the user' })
     @Column({ type: 'jsonb', nullable: true })
     readonly company: CompanyDto | undefined;
+
+    @ManyToMany(() => RoleEntity, ({ users }): UserEntity[] => users, {
+        eager: true,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+    })
+    @JoinTable({
+        name: 'users_roles',
+        joinColumn: {
+            name: 'users',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'roles',
+            referencedColumnName: 'id',
+        },
+    })
+    readonly roles: Relation<RoleEntity[]> = [];
 
     constructor(partialData: Partial<UserEntity>) {
         super();
