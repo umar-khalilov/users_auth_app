@@ -1,6 +1,15 @@
-import { Column, Entity, JoinTable, ManyToMany, Relation } from 'typeorm';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    JoinTable,
+    ManyToMany,
+    Relation,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { HashService } from '@/common/services/hashes/hash.service';
 import { AbstractEntity } from '../abstract/abstract.entity';
 import { AddressDto } from './dto/address.dto';
 import { CompanyDto } from './dto/company.dto';
@@ -32,7 +41,7 @@ export class UserEntity extends AbstractEntity {
 
     @Exclude({ toPlainOnly: true })
     @Column({ type: 'text', name: 'password_hash', nullable: false })
-    readonly password: string | undefined;
+    password: string | undefined;
 
     @ApiProperty({ example: AddressDto, description: 'Address of the user' })
     @Column({ type: 'jsonb', nullable: true })
@@ -74,8 +83,19 @@ export class UserEntity extends AbstractEntity {
     })
     readonly roles: Relation<RoleEntity[]> = [];
 
-    constructor(partialData: Partial<UserEntity>) {
+    constructor(
+        partialData: Partial<UserEntity>,
+        private readonly hashService: HashService,
+    ) {
         super();
         Object.assign(this, partialData);
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword(): Promise<void> {
+        if (!!this.password) {
+            this.password = await this.hashService.hashPassword(this.password);
+        }
     }
 }

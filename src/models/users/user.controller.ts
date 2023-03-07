@@ -1,7 +1,6 @@
 import {
     Controller,
     Get,
-    Post,
     Body,
     Patch,
     Param,
@@ -11,9 +10,6 @@ import {
     ParseIntPipe,
     Query,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './user.entity';
 import {
     ApiAcceptedResponse,
     ApiNoContentResponse,
@@ -23,6 +19,9 @@ import {
     ApiParam,
     ApiTags,
 } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
+import { UserService } from './user.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { PageOptionsDto } from '@/common/dto/page-options.dto';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 import { ApiPaginatedResponse } from '@/common/decorators/paginate-response.decorator';
@@ -52,7 +51,7 @@ export class UserController {
         required: true,
     })
     @ApiOkResponse({ type: UserDto })
-    @ApiNotFoundResponse({ description: 'User with that id: 1 not found' })
+    @ApiNotFoundResponse({ description: 'User with that id not found' })
     @Get('/:id')
     async findOne(
         @Param(
@@ -75,7 +74,7 @@ export class UserController {
         required: true,
     })
     @ApiAcceptedResponse({ type: UserDto })
-    @ApiNotFoundResponse({ description: 'User with that id: 1 not found' })
+    @ApiNotFoundResponse({ description: 'User with that id not found' })
     @HttpCode(HttpStatus.ACCEPTED)
     @Patch('/:id')
     async update(
@@ -102,7 +101,7 @@ export class UserController {
     @ApiNoContentResponse({
         description: 'Only status code',
     })
-    @ApiNotFoundResponse({ description: 'User with that id: 1 not found' })
+    @ApiNotFoundResponse({ description: 'User with that id not found' })
     @HttpCode(HttpStatus.NO_CONTENT)
     @Delete('/:id')
     async remove(
@@ -114,6 +113,6 @@ export class UserController {
         )
         id: number,
     ): Promise<void> {
-        return this.userService.removeById(id);
+        this.userService.removeById(id);
     }
 }
