@@ -26,7 +26,7 @@ export class CreateUserDto {
     })
     @IsString({ message: 'fullName must be a string' })
     @IsNotEmpty({ message: 'fullName cannot be an empty' })
-    readonly fullName: string | undefined;
+    readonly name: string | undefined;
 
     @ApiProperty({
         example: 'Bret',
@@ -38,11 +38,12 @@ export class CreateUserDto {
     })
     @IsString({ message: 'userName must be a string' })
     @IsNotEmpty({ message: 'userName cannot be an empty' })
-    readonly userName: string | undefined;
+    readonly username: string | undefined;
 
     @ApiProperty({
         example: 'Sincere@april.biz',
         description: 'The email of user',
+        format: 'email',
         required: true,
     })
     @IsEmail({}, { message: 'email must be a valid email address' })
@@ -55,8 +56,10 @@ export class CreateUserDto {
 
     @ApiProperty({
         example: '3f4Ij40)LW_2!iw',
-        description: 'Password',
+        writeOnly: true,
         required: true,
+        format: 'password',
+        description: 'Password',
     })
     @Matches(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,32}$/,
@@ -86,7 +89,7 @@ export class CreateUserDto {
         description: 'The phone number of user',
         required: false,
     })
-    @MaxLength(20, {
+    @MaxLength(22, {
         message: 'phone cannot be more than 20 characters',
     })
     @IsString({ message: 'phone must be a string' })

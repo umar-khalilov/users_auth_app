@@ -1,5 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import {
+    ClassSerializerInterceptor,
+    INestApplication,
+    Logger,
+    ValidationPipe,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
@@ -40,6 +45,9 @@ export class App {
                 whitelist: true,
                 transform: true,
             }),
+        );
+        app.useGlobalInterceptors(
+            new ClassSerializerInterceptor(app.get(Reflector)),
         );
         await app.register(compression, { encodings: ['gzip', 'deflate'] });
         return new App(app);

@@ -11,24 +11,25 @@ export class UserEntity extends AbstractEntity {
         example: 'Leanne Graham',
         description: 'The full name of user',
     })
-    @Column({ type: 'varchar2', length: 450, nullable: false })
-    readonly fullName: string | undefined;
+    @Column({ type: 'varchar', length: 450, nullable: false })
+    readonly name: string | undefined;
 
     @ApiProperty({
         example: 'Bret',
         description: 'The username of user',
     })
-    @Column({ type: 'varchar2', length: 300, nullable: false })
-    readonly userName: string | undefined;
+    @Column({ type: 'varchar', length: 300, nullable: false })
+    readonly username: string | undefined;
 
     @ApiProperty({
         example: 'Sincere@april.biz',
         description: 'The email of user',
+        format: 'email',
     })
-    @Column({ type: 'varchar2', unique: true, length: 350, nullable: false })
+    @Column({ type: 'varchar', unique: true, length: 350, nullable: false })
     readonly email: string | undefined;
 
-    @Exclude()
+    @Exclude({ toPlainOnly: true })
     @Column({ type: 'text', name: 'password_hash', nullable: false })
     readonly password: string | undefined;
 
@@ -40,14 +41,14 @@ export class UserEntity extends AbstractEntity {
         example: '1-770-736-8031 x56442',
         description: 'The phone number of user',
     })
-    @Column({ type: 'varchar2', length: 20, nullable: true })
+    @Column({ type: 'varchar', length: 22, nullable: true })
     readonly phone: string | undefined;
 
     @ApiProperty({
         example: 'hildegard.org',
         description: 'The website of user',
     })
-    @Column({ type: 'varchar2', length: 300, nullable: true })
+    @Column({ type: 'varchar', length: 300, nullable: true })
     readonly website: string | undefined;
 
     @ApiProperty({ example: CompanyDto, description: 'Company of the user' })
