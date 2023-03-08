@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { toUserDto, typeReturn } from '@/common/utils/helpers.util';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 import { PageOptionsDto } from '@/common/dto/page-options.dto';
 import { PageMetaDto } from '@/common/dto/page-meta.dto';
@@ -12,6 +11,11 @@ import { UserDto } from './dto/user.dto';
 import { RoleService } from '../roles/role.service';
 import { RoleTypes } from '@/common/enums/role-types.enum';
 import { AddRoleDto } from './dto/add-role.dto';
+import {
+    convertToHashPassword,
+    toUserDto,
+    typeReturn,
+} from '@/common/utils/helpers.util';
 
 @Injectable()
 export class UserService {
@@ -75,6 +79,12 @@ export class UserService {
         id: number,
         updateUserDto: UpdateUserDto,
     ): Promise<UserDto> {
+        if (updateUserDto.password) {
+            updateUserDto.password = await convertToHashPassword(
+                updateUserDto.password,
+            );
+        }
+
         const updatedUser = await typeReturn<UserEntity>(
             this.userRepository
                 .createQueryBuilder()

@@ -1,10 +1,5 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import {
-    ClassSerializerInterceptor,
-    INestApplication,
-    Logger,
-    ValidationPipe,
-} from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {
@@ -46,9 +41,6 @@ export class App {
                 transform: true,
             }),
         );
-        app.useGlobalInterceptors(
-            new ClassSerializerInterceptor(app.get(Reflector)),
-        );
         await app.register(compression, { encodings: ['gzip', 'deflate'] });
 
         return new App(app);
@@ -61,6 +53,11 @@ export class App {
                 'This app show emulate authentication, authorization with users and their roles',
             )
             .setVersion('1.0.0')
+            .setContact(
+                'Umar Khalilov',
+                'https://umar-khalilov.github.io',
+                'ERMASTER100@gmail.com',
+            )
             .addBearerAuth()
             .build();
         const document = SwaggerModule.createDocument(

@@ -62,5 +62,5 @@ export class CreateUserDto {
     )
     @IsString({ message: 'password must be a string' })
     @IsNotEmpty({ message: 'password cannot be an empty' })
-    readonly password: string;
+    password: string;
 }
