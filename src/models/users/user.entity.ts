@@ -1,19 +1,10 @@
-import {
-    BeforeInsert,
-    BeforeUpdate,
-    Column,
-    Entity,
-    JoinTable,
-    ManyToMany,
-    Relation,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, Relation } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
-import { HashService } from '@/common/services/hashes/hash.service';
 import { AbstractEntity } from '../abstract/abstract.entity';
+import { RoleEntity } from '../roles/role.entity';
 import { AddressDto } from './dto/address.dto';
 import { CompanyDto } from './dto/company.dto';
-import { RoleEntity } from '../roles/role.entity';
+import { ApiRelation } from '@/common/decorators/api-relation.decorator';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity {
@@ -22,14 +13,14 @@ export class UserEntity extends AbstractEntity {
         description: 'The full name of user',
     })
     @Column({ type: 'varchar', length: 450, nullable: false })
-    readonly name: string | undefined;
+    readonly name!: string;
 
     @ApiProperty({
         example: 'Bret',
         description: 'The username of user',
     })
     @Column({ type: 'varchar', length: 300, nullable: false })
-    readonly username: string | undefined;
+    readonly username!: string;
 
     @ApiProperty({
         example: 'Sincere@april.biz',
@@ -37,11 +28,15 @@ export class UserEntity extends AbstractEntity {
         format: 'email',
     })
     @Column({ type: 'varchar', unique: true, length: 350, nullable: false })
-    readonly email: string | undefined;
+    readonly email!: string;
 
-    @Exclude({ toPlainOnly: true })
-    @Column({ type: 'text', name: 'password_hash', nullable: false })
-    password: string | undefined;
+    @Column({
+        type: 'text',
+        name: 'password_hash',
+        select: false,
+        nullable: false,
+    })
+    readonly password: string;
 
     @ApiProperty({ example: AddressDto, description: 'Address of the user' })
     @Column({ type: 'jsonb', nullable: true })
@@ -65,6 +60,7 @@ export class UserEntity extends AbstractEntity {
     @Column({ type: 'jsonb', nullable: true })
     readonly company: CompanyDto | undefined;
 
+    @ApiRelation()
     @ManyToMany(() => RoleEntity, ({ users }): UserEntity[] => users, {
         eager: true,
         onUpdate: 'CASCADE',
@@ -81,21 +77,10 @@ export class UserEntity extends AbstractEntity {
             referencedColumnName: 'id',
         },
     })
-    readonly roles: Relation<RoleEntity[]> = [];
+    readonly roles!: Relation<RoleEntity[]>;
 
-    constructor(
-        partialData: Partial<UserEntity>,
-        private readonly hashService: HashService,
-    ) {
+    constructor(partialData: Partial<UserEntity>) {
         super();
         Object.assign(this, partialData);
-    }
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    async hashPassword(): Promise<void> {
-        if (!!this.password) {
-            this.password = await this.hashService.hashPassword(this.password);
-        }
     }
 }

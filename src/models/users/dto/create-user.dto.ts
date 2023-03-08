@@ -1,19 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import {
-    IsDefined,
     IsEmail,
     IsNotEmpty,
-    IsObject,
-    IsOptional,
     IsString,
     Length,
     Matches,
-    MaxLength,
-    ValidateNested,
 } from 'class-validator';
-import { AddressDto } from './address.dto';
-import { CompanyDto } from './company.dto';
 
 export class CreateUserDto {
     @ApiProperty({
@@ -70,53 +62,5 @@ export class CreateUserDto {
     )
     @IsString({ message: 'password must be a string' })
     @IsNotEmpty({ message: 'password cannot be an empty' })
-    readonly password: string | undefined;
-
-    @ApiProperty({
-        example: AddressDto,
-        description: 'Address of the user',
-        required: false,
-    })
-    @IsDefined()
-    @ValidateNested()
-    @Type(() => AddressDto)
-    @IsObject({ message: 'address must be an object' })
-    @IsOptional()
-    readonly address: AddressDto | undefined;
-
-    @ApiProperty({
-        example: '1-770-736-8031 x56442',
-        description: 'The phone number of user',
-        required: false,
-    })
-    @MaxLength(22, {
-        message: 'phone cannot be more than 20 characters',
-    })
-    @IsString({ message: 'phone must be a string' })
-    @IsOptional()
-    readonly phone: string | undefined;
-
-    @ApiProperty({
-        example: 'hildegard.org',
-        description: 'The website of user',
-        required: false,
-    })
-    @MaxLength(300, {
-        message: 'website cannot be more than 300 characters',
-    })
-    @IsString({ message: 'website must be a string' })
-    @IsOptional()
-    readonly website: string | undefined;
-
-    @ApiProperty({
-        example: CompanyDto,
-        description: 'Company of the user',
-        required: false,
-    })
-    @IsDefined()
-    @ValidateNested()
-    @Type(() => CompanyDto)
-    @IsObject({ message: 'company must be an object' })
-    @IsOptional()
-    readonly company: CompanyDto | undefined;
+    readonly password!: string;
 }

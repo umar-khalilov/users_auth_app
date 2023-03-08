@@ -50,6 +50,7 @@ export class App {
             new ClassSerializerInterceptor(app.get(Reflector)),
         );
         await app.register(compression, { encodings: ['gzip', 'deflate'] });
+
         return new App(app);
     }
 

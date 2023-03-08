@@ -14,7 +14,7 @@ export class AbstractEntity extends BaseEntity {
         readOnly: true,
     })
     @PrimaryGeneratedColumn('increment')
-    readonly id: number | undefined;
+    readonly id!: number;
 
     @ApiProperty({
         example: new Date().toISOString(),
@@ -25,7 +25,7 @@ export class AbstractEntity extends BaseEntity {
     @CreateDateColumn({
         type: 'timestamptz',
     })
-    readonly createdAt: Date | undefined;
+    readonly createdAt!: Date;
 
     @ApiProperty({
         example: new Date().toISOString(),
@@ -36,5 +36,5 @@ export class AbstractEntity extends BaseEntity {
     @UpdateDateColumn({
         type: 'timestamptz',
     })
-    readonly updatedAt: Date | undefined;
+    readonly updatedAt!: Date;
 }

@@ -1,5 +1,6 @@
 import { AddressDto } from './address.dto';
 import { CompanyDto } from './company.dto';
+import { RoleEntity } from '@/models/roles/role.entity';
 
 export class UserDto {
     readonly id: number | undefined;
@@ -17,6 +18,8 @@ export class UserDto {
     readonly website: string | undefined;
 
     readonly company: CompanyDto | undefined;
+
+    readonly roles: RoleEntity[] | undefined;
 
     readonly createdAt: Date | undefined;
 

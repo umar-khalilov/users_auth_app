@@ -1,13 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-    IsEnum,
-    IsInt,
-    IsNotEmpty,
-    IsPort,
-    IsString,
-    Max,
-    Min,
-} from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
 import { Environment } from './constants/environment.enum';
 
 export class EnvironmentVariables {
@@ -82,4 +74,12 @@ export class EnvironmentVariables {
     @Type(() => Number)
     @IsNotEmpty()
     readonly CACHE_TTL: number | undefined;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly JWT_ACCESS_TOKEN_SECRET: string | undefined;
+
+    @IsString()
+    @IsNotEmpty()
+    readonly JWT_ACCESS_TOKEN_EXPIRATION_TIME: string | undefined;
 }

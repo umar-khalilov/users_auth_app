@@ -9,6 +9,7 @@ import {
     HttpStatus,
     ParseIntPipe,
     Query,
+    Post,
 } from '@nestjs/common';
 import {
     ApiAcceptedResponse,
@@ -26,11 +27,17 @@ import { PageOptionsDto } from '@/common/dto/page-options.dto';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 import { ApiPaginatedResponse } from '@/common/decorators/paginate-response.decorator';
 import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @ApiTags('Users')
-@Controller('users')
+@Controller('/users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
+
+    @Post('/')
+    async create(@Body() dto: CreateUserDto): Promise<UserEntity | void> {
+        return this.userService.createOne(dto);
+    }
 
     @ApiOperation({ summary: 'Find all users' })
     @ApiPaginatedResponse(UserEntity)
