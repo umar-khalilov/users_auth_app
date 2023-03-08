@@ -9,16 +9,18 @@ import {
     HttpStatus,
     ParseIntPipe,
     Query,
-    Post,
+    UseGuards,
 } from '@nestjs/common';
 import {
     ApiAcceptedResponse,
+    ApiBearerAuth,
     ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
     ApiParam,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
@@ -27,21 +29,21 @@ import { PageOptionsDto } from '@/common/dto/page-options.dto';
 import { PaginationDto } from '@/common/dto/pagination.dto';
 import { ApiPaginatedResponse } from '@/common/decorators/paginate-response.decorator';
 import { UserDto } from './dto/user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { RolesGuard } from '@/auth/guards/roles.guard';
+import { RoleTypes } from '@/common/enums/role-types.enum';
 
 @ApiTags('Users')
+@ApiBearerAuth()
 @Controller('/users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Post('/')
-    async create(@Body() dto: CreateUserDto): Promise<UserEntity | void> {
-        return this.userService.createOne(dto);
-    }
-
     @ApiOperation({ summary: 'Find all users' })
     @ApiPaginatedResponse(UserEntity)
     @ApiNotFoundResponse({ description: 'Not found users in database' })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
+    @UseGuards(JwtAuthGuard)
     @Get('/')
     async findAll(
         @Query() pageOptionsDto: PageOptionsDto,
@@ -59,6 +61,8 @@ export class UserController {
     })
     @ApiOkResponse({ type: UserDto })
     @ApiNotFoundResponse({ description: 'User with that id not found' })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
+    @UseGuards(RolesGuard(RoleTypes.USER))
     @Get('/:id')
     async findOne(
         @Param(
@@ -81,8 +85,10 @@ export class UserController {
         required: true,
     })
     @ApiAcceptedResponse({ type: UserDto })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
     @ApiNotFoundResponse({ description: 'User with that id not found' })
     @HttpCode(HttpStatus.ACCEPTED)
+    @UseGuards(JwtAuthGuard)
     @Patch('/:id')
     async update(
         @Param(

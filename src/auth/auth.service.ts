@@ -2,6 +2,7 @@ import {
     BadRequestException,
     ConflictException,
     Inject,
+    Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -19,9 +20,9 @@ import {
     omitBy,
 } from '@/common/utils/helpers.util';
 
+@Injectable()
 export class AuthService {
     constructor(
-        @Inject(UserService)
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
     ) {}

@@ -61,6 +61,7 @@ export class App {
                 'This app show emulate authentication, authorization with users and their roles',
             )
             .setVersion('1.0.0')
+            .addBearerAuth()
             .build();
         const document = SwaggerModule.createDocument(
             this.application,
