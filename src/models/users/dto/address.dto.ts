@@ -6,19 +6,19 @@ import { GeoDto } from './geo.dto';
 export class AddressDto {
     @ApiProperty({ example: 'Kulas Light', description: 'The street' })
     @IsString({ message: 'street must be a string' })
-    readonly street: string | undefined;
+    readonly street: string;
 
     @ApiProperty({ example: 'Apt. 556', description: 'The suite' })
     @IsString({ message: 'suite must be a string' })
-    readonly suite: string | undefined;
+    readonly suite: string;
 
     @ApiProperty({ example: 'Gwenborough', description: 'The city' })
     @IsString({ message: 'city must be a string' })
-    readonly city: string | undefined;
+    readonly city: string;
 
     @ApiProperty({ example: '92998-3874', description: 'The zipcode' })
     @IsString({ message: 'zipcode must be a string' })
-    readonly zipcode: string | undefined;
+    readonly zipcode: string;
 
     @ApiProperty({
         example: GeoDto,
@@ -28,5 +28,5 @@ export class AddressDto {
     @ValidateNested()
     @Type(() => GeoDto)
     @IsObject({ message: 'geo must be an object' })
-    readonly geo: GeoDto | undefined;
+    readonly geo: GeoDto;
 }

@@ -18,7 +18,7 @@ export class CreateUserDto {
     })
     @IsString({ message: 'fullName must be a string' })
     @IsNotEmpty({ message: 'fullName cannot be an empty' })
-    readonly name: string | undefined;
+    readonly name: string;
 
     @ApiProperty({
         example: 'Bret',
@@ -30,7 +30,7 @@ export class CreateUserDto {
     })
     @IsString({ message: 'userName must be a string' })
     @IsNotEmpty({ message: 'userName cannot be an empty' })
-    readonly username: string | undefined;
+    readonly username: string;
 
     @ApiProperty({
         example: 'Sincere@april.biz',
@@ -44,7 +44,7 @@ export class CreateUserDto {
     })
     @IsString({ message: 'email must be a string' })
     @IsNotEmpty({ message: 'email cannot be an empty' })
-    readonly email: string | undefined;
+    readonly email: string;
 
     @ApiProperty({
         example: '3f4Ij40)LW_2!iw',
@@ -62,5 +62,5 @@ export class CreateUserDto {
     )
     @IsString({ message: 'password must be a string' })
     @IsNotEmpty({ message: 'password cannot be an empty' })
-    readonly password!: string;
+    readonly password: string;
 }

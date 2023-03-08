@@ -4,8 +4,7 @@ import { PaginationDto } from '../dto/pagination.dto';
 
 export const ApiPaginatedResponse = <TModel extends Type<unknown>>(
     model: TModel,
-    // eslint-disable-next-line @typescript-eslint/ban-types
-): Function =>
+): MethodDecorator | PropertyDecorator =>
     applyDecorators(
         ApiExtraModels(PaginationDto),
         ApiOkResponse({

@@ -14,6 +14,7 @@ import {
 import {
     ApiAcceptedResponse,
     ApiBearerAuth,
+    ApiForbiddenResponse,
     ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
@@ -32,6 +33,7 @@ import { UserDto } from './dto/user.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { RoleTypes } from '@/common/enums/role-types.enum';
+import { AddRoleDto } from './dto/add-role.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -42,13 +44,24 @@ export class UserController {
     @ApiOperation({ summary: 'Find all users' })
     @ApiPaginatedResponse(UserEntity)
     @ApiNotFoundResponse({ description: 'Not found users in database' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource' })
     @ApiUnauthorizedResponse({ description: 'User is not authorized' })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(RolesGuard(RoleTypes.ADMIN, RoleTypes.MANAGER))
     @Get('/')
     async findAll(
         @Query() pageOptionsDto: PageOptionsDto,
     ): Promise<PaginationDto<UserEntity>> {
         return this.userService.findAll(pageOptionsDto);
+    }
+
+    @ApiOperation({ summary: 'Add role to user' })
+    @ApiNotFoundResponse({ description: 'User or role not found' })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource' })
+    @UseGuards(RolesGuard(RoleTypes.ADMIN))
+    @Patch('/role')
+    async addRole(@Body() dto: AddRoleDto): Promise<string> {
+        return this.userService.addRoleToUser(dto);
     }
 
     @ApiOperation({ summary: 'Get a user' })
@@ -62,7 +75,7 @@ export class UserController {
     @ApiOkResponse({ type: UserDto })
     @ApiNotFoundResponse({ description: 'User with that id not found' })
     @ApiUnauthorizedResponse({ description: 'User is not authorized' })
-    @UseGuards(RolesGuard(RoleTypes.USER))
+    @UseGuards(JwtAuthGuard)
     @Get('/:id')
     async findOne(
         @Param(
@@ -72,7 +85,7 @@ export class UserController {
             }),
         )
         id: number,
-    ): Promise<UserDto> {
+    ): Promise<UserEntity> {
         return this.userService.findOneById(id);
     }
 
@@ -115,7 +128,10 @@ export class UserController {
         description: 'Only status code',
     })
     @ApiNotFoundResponse({ description: 'User with that id not found' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource' })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
     @HttpCode(HttpStatus.NO_CONTENT)
+    @UseGuards(RolesGuard(RoleTypes.ADMIN, RoleTypes.MANAGER))
     @Delete('/:id')
     async remove(
         @Param(

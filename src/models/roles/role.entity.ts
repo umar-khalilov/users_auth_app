@@ -17,15 +17,15 @@ export class RoleEntity extends AbstractEntity {
         enum: RoleTypes,
         unique: true,
     })
-    readonly value!: RoleTypes;
+    readonly value: RoleTypes;
 
     @ApiProperty({ example: 'About role', description: 'Description role' })
     @Column({ type: 'varchar', length: 500, nullable: false })
-    readonly description!: string;
+    readonly description: string;
 
     @ApiRelation()
     @ManyToMany(() => UserEntity, ({ roles }): RoleEntity[] => roles)
-    readonly users!: Relation<UserEntity[]>;
+    readonly users: Relation<UserEntity[]>;
 
     constructor(partialData: Partial<RoleEntity>) {
         super();

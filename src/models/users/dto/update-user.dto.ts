@@ -23,7 +23,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @Type(() => AddressDto)
     @IsObject({ message: 'address must be an object' })
     @IsOptional()
-    readonly address: AddressDto | undefined;
+    readonly address: AddressDto;
 
     @ApiProperty({
         example: '1-770-736-8031 x56442',
@@ -35,7 +35,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     })
     @IsString({ message: 'phone must be a string' })
     @IsOptional()
-    readonly phone: string | undefined;
+    readonly phone: string;
 
     @ApiProperty({
         example: 'hildegard.org',
@@ -47,7 +47,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     })
     @IsString({ message: 'website must be a string' })
     @IsOptional()
-    readonly website: string | undefined;
+    readonly website: string;
 
     @ApiProperty({
         example: CompanyDto,
@@ -59,5 +59,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @Type(() => CompanyDto)
     @IsObject({ message: 'company must be an object' })
     @IsOptional()
-    readonly company: CompanyDto | undefined;
+    readonly company: CompanyDto;
 }

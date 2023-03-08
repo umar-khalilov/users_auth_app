@@ -7,12 +7,12 @@ export class GeoDto {
         description: 'The latitude coordinate',
     })
     @IsLatitude({ message: 'lat must be a valid latitude coordinate' })
-    readonly lat: number | undefined;
+    readonly lat: number;
 
     @ApiProperty({
         example: 81.1496,
         description: 'The longitude coordinate',
     })
     @IsLongitude({ message: 'lng must be a valid longitude coordinate' })
-    readonly lng: number | undefined;
+    readonly lng: number;
 }

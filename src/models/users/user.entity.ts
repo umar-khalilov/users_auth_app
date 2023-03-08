@@ -13,14 +13,14 @@ export class UserEntity extends AbstractEntity {
         description: 'The full name of user',
     })
     @Column({ type: 'varchar', length: 450, nullable: false })
-    readonly name!: string;
+    readonly name: string;
 
     @ApiProperty({
         example: 'Bret',
         description: 'The username of user',
     })
     @Column({ type: 'varchar', length: 300, nullable: false })
-    readonly username!: string;
+    readonly username: string;
 
     @ApiProperty({
         example: 'Sincere@april.biz',
@@ -28,7 +28,7 @@ export class UserEntity extends AbstractEntity {
         format: 'email',
     })
     @Column({ type: 'varchar', unique: true, length: 350, nullable: false })
-    readonly email!: string;
+    readonly email: string;
 
     @Column({
         type: 'text',
@@ -40,25 +40,25 @@ export class UserEntity extends AbstractEntity {
 
     @ApiProperty({ example: AddressDto, description: 'Address of the user' })
     @Column({ type: 'jsonb', nullable: true })
-    readonly address: AddressDto | undefined;
+    readonly address: AddressDto;
 
     @ApiProperty({
         example: '1-770-736-8031 x56442',
         description: 'The phone number of user',
     })
     @Column({ type: 'varchar', length: 22, nullable: true })
-    readonly phone: string | undefined;
+    readonly phone: string;
 
     @ApiProperty({
         example: 'hildegard.org',
         description: 'The website of user',
     })
     @Column({ type: 'varchar', length: 300, nullable: true })
-    readonly website: string | undefined;
+    readonly website: string;
 
     @ApiProperty({ example: CompanyDto, description: 'Company of the user' })
     @Column({ type: 'jsonb', nullable: true })
-    readonly company: CompanyDto | undefined;
+    readonly company: CompanyDto;
 
     @ApiRelation()
     @ManyToMany(() => RoleEntity, ({ users }): UserEntity[] => users, {
@@ -77,7 +77,7 @@ export class UserEntity extends AbstractEntity {
             referencedColumnName: 'id',
         },
     })
-    readonly roles!: Relation<RoleEntity[]>;
+    readonly roles: Relation<RoleEntity[]>;
 
     constructor(partialData: Partial<UserEntity>) {
         super();

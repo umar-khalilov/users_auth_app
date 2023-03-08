@@ -11,6 +11,13 @@ export class RoleService {
         private readonly roleRepository: Repository<RoleEntity>,
     ) {}
 
+    async getAllRoles(): Promise<RoleEntity[]> {
+        return this.roleRepository
+            .createQueryBuilder('role')
+            .select(['role.value', 'role.description'])
+            .getMany();
+    }
+
     async getRoleByValue(value: RoleTypes): Promise<RoleEntity> {
         const foundRole = await this.roleRepository
             .createQueryBuilder('role')

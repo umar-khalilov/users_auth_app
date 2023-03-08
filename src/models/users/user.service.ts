@@ -11,6 +11,7 @@ import { PageMetaDto } from '@/common/dto/page-meta.dto';
 import { UserDto } from './dto/user.dto';
 import { RoleService } from '../roles/role.service';
 import { RoleTypes } from '@/common/enums/role-types.enum';
+import { AddRoleDto } from './dto/add-role.dto';
 
 @Injectable()
 export class UserService {
@@ -48,7 +49,7 @@ export class UserService {
         return new PaginationDto<UserEntity>(users, pageMetaDto);
     }
 
-    async findOneById(id: number): Promise<UserDto> {
+    async findOneById(id: number): Promise<UserEntity> {
         const foundUser = await this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.roles', 'roles')
@@ -58,7 +59,7 @@ export class UserService {
         if (!foundUser) {
             throw new NotFoundException(`User with that id: ${id} not found`);
         }
-        return toUserDto(foundUser);
+        return foundUser;
     }
 
     async findUserByEmail(email: string): Promise<UserEntity> {
@@ -102,5 +103,18 @@ export class UserService {
         if (!removedUser) {
             throw new NotFoundException(`User with that id: ${id} not found`);
         }
+    }
+
+    async addRoleToUser({ userId, value }: AddRoleDto): Promise<string> {
+        const user = await this.findOneById(userId);
+        const role = await this.roleService.getRoleByValue(value);
+        if (user && role) {
+            await this.userRepository.save({
+                ...user,
+                roles: [...user.roles, role],
+            });
+            return `Role: ${value} to user with that id: ${userId} successfully added`;
+        }
+        throw new NotFoundException('User or role not found');
     }
 }

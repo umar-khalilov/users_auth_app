@@ -3,25 +3,25 @@ import { CompanyDto } from './company.dto';
 import { RoleEntity } from '@/models/roles/role.entity';
 
 export class UserDto {
-    readonly id: number | undefined;
+    readonly id: number;
 
-    readonly name: string | undefined;
+    readonly name: string;
 
-    readonly username: string | undefined;
+    readonly username: string;
 
-    readonly email: string | undefined;
+    readonly email: string;
 
-    readonly address: AddressDto | undefined;
+    readonly address: AddressDto;
 
-    readonly phone: string | undefined;
+    readonly phone: string;
 
-    readonly website: string | undefined;
+    readonly website: string;
 
-    readonly company: CompanyDto | undefined;
+    readonly company: CompanyDto;
 
-    readonly roles: RoleEntity[] | undefined;
+    readonly roles: RoleEntity[];
 
-    readonly createdAt: Date | undefined;
+    readonly createdAt: Date;
 
-    readonly updatedAt: Date | undefined;
+    readonly updatedAt: Date;
 }
