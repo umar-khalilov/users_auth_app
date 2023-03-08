@@ -17,18 +17,6 @@ services:
             - users-net
         tty: true
         restart: always
-    redis:
-        container_name: redis
-        image: 'redis:alpine3.15'
-        env_file:
-            - ./.development.env
-        ports:
-            - ${REDIS_PORT}:${REDIS_PORT}
-        links:
-            - database
-        networks:
-            - users-net
-        restart: on-failure
     node-app:
         container_name: node-app
         build:
@@ -50,7 +38,6 @@ services:
             - users-net
         depends_on:
             - database
-            - redis
         restart: on-failure
 
 volumes:

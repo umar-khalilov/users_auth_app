@@ -38,10 +38,11 @@ export class UserService {
         pageOptionsDto: PageOptionsDto,
     ): Promise<PaginationDto<UserEntity>> {
         const { take, skip, order } = pageOptionsDto;
+
         const [users, itemCount] = await this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.roles', 'roles')
-            .orderBy('user.createdAt', order)
+            .orderBy('user.id', order)
             .skip(skip)
             .take(take)
             .getManyAndCount();
