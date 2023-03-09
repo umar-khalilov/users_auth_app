@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { validateEnv } from './app/validateEnv';
 import { DatabaseOptionsService } from './app/database/database-options.service';
 import { SeedingService } from './app/database/seeds/seeding.service';
+import { RedisCacheModule } from './cache/redis-cache.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { SeedingService } from './app/database/seeds/seeding.service';
         TypeOrmModule.forRootAsync({
             useClass: DatabaseOptionsService,
         }),
+        RedisCacheModule,
         AuthModule,
         UserModule,
         RoleModule,

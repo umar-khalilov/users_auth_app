@@ -85,7 +85,7 @@ export class UserController {
             }),
         )
         id: number,
-    ): Promise<UserEntity> {
+    ): Promise<UserEntity | undefined> {
         return this.userService.findOneById(id);
     }
 

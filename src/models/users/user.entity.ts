@@ -4,7 +4,6 @@ import { AbstractEntity } from '../abstract/abstract.entity';
 import { RoleEntity } from '../roles/role.entity';
 import { AddressDto } from './dto/address.dto';
 import { CompanyDto } from './dto/company.dto';
-import { ApiRelation } from '@/common/decorators/api-relation.decorator';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity {
@@ -60,7 +59,6 @@ export class UserEntity extends AbstractEntity {
     @Column({ type: 'jsonb', nullable: true })
     readonly company: CompanyDto;
 
-    @ApiRelation()
     @ManyToMany(() => RoleEntity, ({ users }): UserEntity[] => users, {
         eager: true,
         onUpdate: 'CASCADE',

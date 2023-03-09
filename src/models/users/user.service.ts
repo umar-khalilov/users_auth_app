@@ -11,6 +11,7 @@ import { UserDto } from './dto/user.dto';
 import { RoleService } from '../roles/role.service';
 import { RoleTypes } from '@/common/enums/role-types.enum';
 import { AddRoleDto } from './dto/add-role.dto';
+import { RedisCacheService } from '@/cache/redis-cache.service';
 import {
     convertToHashPassword,
     toUserDto,
@@ -23,6 +24,7 @@ export class UserService {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
         private readonly roleService: RoleService,
+        private readonly cacheService: RedisCacheService,
     ) {}
 
     async createOne(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -54,7 +56,12 @@ export class UserService {
         return new PaginationDto<UserEntity>(users, pageMetaDto);
     }
 
-    async findOneById(id: number): Promise<UserEntity> {
+    async findOneById(id: number): Promise<UserEntity | undefined> {
+        const isUser = await this.cacheService.hasKey(String(id));
+
+        if (isUser) {
+            return this.cacheService.getValueByKey<UserEntity>(String(id));
+        }
         const foundUser = await this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.roles', 'roles')
@@ -64,6 +71,7 @@ export class UserService {
         if (!foundUser) {
             throw new NotFoundException(`User with that id: ${id} not found`);
         }
+        await this.cacheService.setValueByKey(String(id), foundUser);
         return foundUser;
     }
 
@@ -98,6 +106,7 @@ export class UserService {
         if (!updatedUser) {
             throw new NotFoundException(`User with that id: ${id} not found`);
         }
+        await this.cacheService.delValueByKey(String(id));
         return toUserDto(updatedUser);
     }
 
@@ -114,6 +123,7 @@ export class UserService {
         if (!removedUser) {
             throw new NotFoundException(`User with that id: ${id} not found`);
         }
+        await this.cacheService.delValueByKey(String(id));
     }
 
     async addRoleToUser({ userId, value }: AddRoleDto): Promise<string> {

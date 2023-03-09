@@ -5,81 +5,81 @@ import { Environment } from './constants/environment.enum';
 export class EnvironmentVariables {
     @IsEnum(Environment)
     @IsNotEmpty()
-    readonly NODE_ENV: Environment | undefined;
+    readonly NODE_ENV: Environment;
 
     @IsString()
-    readonly DEPLOY_HOST: string | undefined;
+    readonly DEPLOY_HOST: string;
 
     @Min(0)
     @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
-    readonly SERVER_PORT: number | undefined;
+    readonly SERVER_PORT: number;
 
     @Min(0)
     @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
-    readonly DEBUG_PORT: number | undefined;
+    readonly DEBUG_PORT: number;
 
     @IsString()
     @IsNotEmpty()
-    readonly DB_TYPE: string | undefined;
+    readonly DB_TYPE: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly DB_HOST: string | undefined;
+    readonly DB_HOST: string;
 
     @Min(0)
     @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
-    readonly DB_PORT: number | undefined;
+    readonly DB_PORT: number;
 
     @IsString()
     @IsNotEmpty()
-    readonly DB_USER: string | undefined;
+    readonly DB_USER: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly DB_NAME: string | undefined;
+    readonly DB_NAME: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly DB_PASSWORD: string | undefined;
+    readonly DB_PASSWORD: string;
 
     @Min(0)
     @Max(65535)
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
-    readonly REDIS_PORT: number | undefined;
+    readonly REDIS_PORT: number;
 
     @IsString()
     @IsNotEmpty()
-    readonly REDIS_HOST: string | undefined;
+    readonly REDIS_HOST: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly REDIS_USERNAME: string | undefined;
+    readonly REDIS_USERNAME: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly REDIS_PASSWORD: string | undefined;
+    readonly REDIS_PASSWORD: string;
 
     @IsInt()
     @Type(() => Number)
     @IsNotEmpty()
-    readonly CACHE_TTL: number | undefined;
+    readonly CACHE_TTL: number;
 
     @IsString()
     @IsNotEmpty()
-    readonly JWT_ACCESS_TOKEN_SECRET: string | undefined;
+    readonly JWT_ACCESS_TOKEN_SECRET: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly JWT_ACCESS_TOKEN_EXPIRATION_TIME: string | undefined;
+    readonly JWT_ACCESS_TOKEN_EXPIRATION_TIME: string;
 }
