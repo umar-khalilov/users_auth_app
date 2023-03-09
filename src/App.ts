@@ -41,7 +41,9 @@ export class App {
                 transform: true,
             }),
         );
-        await app.register(compression, { encodings: ['gzip', 'deflate'] });
+        await app.register(compression, {
+            encodings: ['gzip', 'deflate'],
+        });
 
         return new App(app);
     }

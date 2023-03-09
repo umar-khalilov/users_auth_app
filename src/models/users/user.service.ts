@@ -11,6 +11,7 @@ import { UserDto } from './dto/user.dto';
 import { RoleService } from '../roles/role.service';
 import { RoleTypes } from '@/common/enums/role-types.enum';
 import { AddRoleDto } from './dto/add-role.dto';
+import { RemoveRoleDto } from './dto/remove-role.dto';
 import { RedisCacheService } from '@/cache/redis-cache.service';
 import {
     convertToHashPassword,
@@ -139,7 +140,10 @@ export class UserService {
         throw new NotFoundException('User or role not found');
     }
 
-    async removeRoleFromUser({ userId, value }: AddRoleDto): Promise<string> {
+    async removeRoleFromUser({
+        userId,
+        value,
+    }: RemoveRoleDto): Promise<string> {
         const user = await this.findOneById(userId);
         const role = await this.roleService.getRoleByValue(value);
         if (user && role) {

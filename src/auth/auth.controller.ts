@@ -1,11 +1,4 @@
-import {
-    Body,
-    Controller,
-    HttpCode,
-    HttpStatus,
-    Post,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
     ApiConflictResponse,
@@ -35,14 +28,8 @@ export class AuthController {
     @ApiOperation({ summary: 'Sign in a user' })
     @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
     @HttpCode(HttpStatus.OK)
-    // @UseGuards(LocalAuthGuard)
     @Post('/sign-in')
     async signIn(@Body() data: SignInDto): Promise<IUserAuth> {
         return this.authService.signIn(data);
     }
-
-    // async signOut(@Req() request) {
-    //     request.headers.authorization = null;
-    //     return request;
-    // }
 }
