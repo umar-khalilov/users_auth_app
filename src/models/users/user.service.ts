@@ -138,4 +138,18 @@ export class UserService {
         }
         throw new NotFoundException('User or role not found');
     }
+
+    async removeRoleFromUser({ userId, value }: AddRoleDto): Promise<string> {
+        const user = await this.findOneById(userId);
+        const role = await this.roleService.getRoleByValue(value);
+        if (user && role) {
+            user.roles.splice(0, 1, role);
+            await this.userRepository.save({
+                ...user,
+                roles: [...user.roles],
+            });
+            return `Role: ${value} from user with that id: ${userId} successfully removed`;
+        }
+        throw new NotFoundException('User or role not found');
+    }
 }

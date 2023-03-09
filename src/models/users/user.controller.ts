@@ -59,9 +59,19 @@ export class UserController {
     @ApiUnauthorizedResponse({ description: 'User is not authorized' })
     @ApiForbiddenResponse({ description: 'Forbidden resource' })
     @UseGuards(RolesGuard(RoleTypes.ADMIN))
-    @Patch('/role')
+    @Patch('/add-role')
     async addRole(@Body() dto: AddRoleDto): Promise<string> {
         return this.userService.addRoleToUser(dto);
+    }
+
+    @ApiOperation({ summary: 'Remove role from user' })
+    @ApiNotFoundResponse({ description: 'User or role not found' })
+    @ApiUnauthorizedResponse({ description: 'User is not authorized' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource' })
+    @UseGuards(RolesGuard(RoleTypes.ADMIN))
+    @Patch('/remove-role')
+    async removeRole(@Body() dto: AddRoleDto): Promise<string> {
+        return this.userService.removeRoleFromUser(dto);
     }
 
     @ApiOperation({ summary: 'Get a user' })
