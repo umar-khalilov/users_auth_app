@@ -6,7 +6,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
-export class AbstractEntity extends BaseEntity {
+export abstract class AbstractEntity extends BaseEntity {
     @ApiProperty({
         example: 1,
         description: 'Primary key',
