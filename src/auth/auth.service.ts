@@ -33,8 +33,7 @@ export class AuthService {
 
     private async validateUser(data: SignInDto): Promise<UserEntity> {
         const user = await this.userService.findUserByEmail(data.email);
-        const isMatch = await checkIsMatch(data.password, user?.password);
-        if (user && isMatch) {
+        if (user && await checkIsMatch(data.password, user?.password)) {
             return user;
         } else {
             throw new UnauthorizedException({
